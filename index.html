@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batch of 2020 Reunion</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css"/>
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+        .hero-bg {
+            background: linear-gradient(rgba(15,23,42,.8), rgba(15,23,42,.8)), url('https://images.unsplash.com/photo-1511578314322-379afb476865');
+            background-size: cover;
+            background-position: center;
+        }
+        .glass {
+            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,.08);
+            border: 1px solid rgba(255,255,255,.15);
+        }
+        .floating {
+            animation: floating 4s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+        }
+        .balloon {
+            position: absolute;
+            width: 40px;
+            height: 50px;
+            border-radius: 50%;
+            opacity: .6;
+            animation: floatUp linear infinite;
+        }
+        .balloon::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 40px;
+            background: white;
+            left: 50%;
+            top: 100%;
+        }
+        .balloon:nth-child(1) { background: #6366f1; left: 10%; animation-duration: 18s; }
+        .balloon:nth-child(2) { background: #8b5cf6; left: 35%; animation-duration: 15s; }
+        .balloon:nth-child(3) { background: #ec4899; left: 60%; animation-duration: 20s; }
+        .balloon:nth-child(4) { background: #06b6d4; left: 85%; animation-duration: 17s; }
+        @keyframes floatUp {
+            from { transform: translateY(100vh); }
+            to { transform: translateY(-120vh); }
+        }
+        .glow {
+            box-shadow: 0 0 20px rgba(99,102,241,.4), 0 0 40px rgba(99,102,241,.2);
+        }
+        .counter-box {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.08);
+        }
+        .dark {
+            background: #0f172a;
+            color: white;
+        }
+        .dark .counter-box {
+            background: #1e293b;
+            color: white;
+        }
+        .dark .card, .dark .venueCard, .dark .bg-white, .dark details {
+            background: #1e293b !important;
+            color: white !important;
+        }
+        .dark input, .dark select {
+            background: #0f172a !important;
+            color: white !important;
+            border-color: #334155 !important;
+        }
+        .dark .text-gray-500, .dark p {
+            color: #94a3b8 !important;
+        }
+        .typing-cursor {
+            animation: blink .8s infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 transition-all duration-500">
+
+    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted) { handleFormSubmitSuccess(); }"></iframe>
+
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+    </div>
+
+    <button onclick="toggleTheme()" class="fixed top-5 right-5 z-50 bg-white dark:bg-slate-800 shadow-xl rounded-full p-3 text-xl border border-gray-200 dark:border-slate-700">
+        🌓
+    </button>
+
+    <section class="hero-bg min-h-screen flex items-center justify-center relative text-white px-6">
+        <div class="absolute inset-0 bg-black/30"></div>
+        <div class="relative z-10 text-center max-w-4xl">
+            <div class="inline-block px-4 py-2 rounded-full glass text-sm font-bold tracking-widest uppercase mb-6 floating">
+                Class of 2020
+            </div>
+            <h1 id="typingText" class="text-5xl md:text-7xl font-black mb-6"></h1>
+            <p data-aos="fade-up" class="text-lg md:text-2xl text-indigo-100 max-w-3xl mx-auto mb-10">
+                One night. One batch. Countless memories waiting to be relived.
+            </p>
+            <div data-aos="zoom-in" class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#countdown" class="bg-indigo-600 hover:bg-indigo-500 px-8 py-4 rounded-xl font-bold text-lg shadow-xl transition-all">
+                    🚀 Start Planning
+                </a>
+                <a href="#rsvp" class="bg-white text-gray-900 hover:bg-gray-100 px-8 py-4 rounded-xl font-bold text-lg shadow-xl transition-all">
+                    🎓 RSVP Now
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="countdown" class="py-16 px-6">
+        <div class="max-w-6xl mx-auto">
+            <div data-aos="fade-up" class="text-center mb-12">
+                <h2 class="text-4xl font-black mb-3">⏳ Reunion Countdown</h2>
+                <p class="text-gray-500">Lock your preferences before registrations close.</p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="counter-box text-center">
+                    <div id="days" class="text-5xl font-black text-indigo-600">00</div>
+                    <div class="mt-2 font-semibold">Days</div>
+                </div>
+                <div class="counter-box text-center">
+                    <div id="hours" class="text-5xl font-black text-indigo-600">00</div>
+                    <div class="mt-2 font-semibold">Hours</div>
+                </div>
+                <div class="counter-box text-center">
+                    <div id="minutes" class="text-5xl font-black text-indigo-600">00</div>
+                    <div class="mt-2 font-semibold">Minutes</div>
+                </div>
+                <div class="counter-box text-center">
+                    <div id="seconds" class="text-5xl font-black text-indigo-600">00</div>
+                    <div class="mt-2 font-semibold">Seconds</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-12 px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div data-aos="zoom-in" class="card bg-white rounded-2xl shadow-lg p-6 text-center">
+                    <div class="text-4xl mb-2">🎓</div>
+                    <div class="text-3xl font-black text-indigo-600">120+</div>
+                    <div class="text-gray-500">Batchmates</div>
+                </div>
+                <div data-aos="zoom-in" data-aos-delay="100" class="card bg-white rounded-2xl shadow-lg p-6 text-center">
+                    <div class="text-4xl mb-2">🔥</div>
+                    <div id="statConfirmedPercent" class="text-3xl font-black text-indigo-600">--%</div>
+                    <div class="text-gray-500">Interested</div>
+                </div>
+                <div data-aos="zoom-in" data-aos-delay="200" class="card bg-white rounded-2xl shadow-lg p-6 text-center">
+                    <div class="text-4xl mb-2">🌆</div>
+                    <div id="statLeadingVote" class="text-3xl font-black text-indigo-600">--</div>
+                    <div class="text-gray-500">Leading Vote</div>
+                </div>
+                <div data-aos="zoom-in" data-aos-delay="300" class="card bg-white rounded-2xl shadow-lg p-6 text-center">
+                    <div class="text-4xl mb-2">🎉</div>
+                    <div class="text-3xl font-black text-indigo-600">2026</div>
+                    <div class="text-gray-500">Reunion Year</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 px-6 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-14" data-aos="fade-up">
+                <h2 class="text-5xl font-black mb-4">📸 Memory Lane</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto">
+                    The moments that defined our journey together. Replace these placeholders with your actual class photos.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-4 gap-5">
+                <div class="md:col-span-2 md:row-span-2 h-[500px] bg-gray-200 rounded-3xl overflow-hidden shadow-xl hover:scale-[1.02] transition duration-500">
+                    <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac" alt="Memory 1" class="w-full h-full object-cover">
+                </div>
+                <div class="h-60 bg-gray-200 rounded-3xl overflow-hidden shadow-xl hover:scale-105 transition duration-500">
+                    <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846" alt="Memory 2" class="w-full h-full object-cover">
+                </div>
+                <div class="h-60 bg-gray-200 rounded-3xl overflow-hidden shadow-xl hover:scale-105 transition duration-500">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f" alt="Memory 3" class="w-full h-full object-cover">
+                </div>
+                <div class="h-60 bg-gray-200 rounded-3xl overflow-hidden shadow-xl hover:scale-105 transition duration-500">
+                    <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7" alt="Memory 4" class="w-full h-full object-cover">
+                </div>
+                <div class="h-60 bg-gray-200 rounded-3xl overflow-hidden shadow-xl hover:scale-105 transition duration-500">
+                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3" alt="Memory 5" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 px-6 bg-gray-50">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-5xl font-black mb-3">🗳 Venue Battle</h2>
+                <p class="text-gray-500">Vote for the location you'd love to attend.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="venueCard bg-white rounded-3xl overflow-hidden shadow-xl hover:-translate-y-2 transition duration-500">
+                    <img src="https://content.jdmagicbox.com/v2/comp/thane/g6/022pxx22.xx22.251119170718.b1g6/catalogue/riccis-caffe-thane-west-thane-coffee-shops-fccm38jbfe-250.jpg" alt="Caffericcis" class="h-64 w-full object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-3xl font-black">🌆 Caffericcis</h3>
+                            <span id="voteCountCaffericcis" class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-bold">-- Votes</span>
+                        </div>
+                        <p class="text-gray-500 mb-5">Premium lounges, sea views, nightlife and easy travel.</p>
+                        <div class="w-full bg-gray-200 h-4 rounded-full overflow-hidden">
+                            <div id="voteProgressCaffericcis" class="bg-indigo-600 h-full rounded-full transition-all duration-1000" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="venueCard bg-white rounded-3xl overflow-hidden shadow-xl hover:-translate-y-2 transition duration-500">
+                    <img src="https://lh3.googleusercontent.com/gps-cs-s/APNQkAG6JB06eA3y5JZZdVPf_RWO20cyif5BIups-OpaOv1nsAk-9kx6UsnSWA5UdsZdnuCHpJdvvQvKfFUgM51z_ClH2fnSydaTW1iPnxHVxs1WOzvJ8TcQVKkxw3ZYGLuhOChT1od8aEMxE-zu=w289-h312-n-k-no" alt="Hill n Chill" class="h-64 w-full object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-3xl font-black">🌴 Hill N Chill</h3>
+                            <span id="voteCountHillnChill" class="bg-purple-100 text-purple-700 px-4 py-2 rounded-full font-bold">-- Votes</span>
+                        </div>
+                        <p class="text-gray-500 mb-5">Relaxed atmosphere, resorts and minimal travel costs.</p>
+                        <div class="w-full bg-gray-200 h-4 rounded-full overflow-hidden">
+                            <div id="voteProgressHillnChill" class="bg-purple-600 h-full rounded-full transition-all duration-1000" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="rsvp" class="py-20 px-6 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-5xl font-black mb-3">🎟 RSVP Portal</h2>
+                <p class="text-gray-500">Lock your preferences and reserve your place.</p>
+            </div>
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-3xl shadow-xl p-8 border">
+                        <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden mb-8">
+                            <div id="formProgress" class="bg-indigo-600 h-full w-0 transition-all duration-500"></div>
+                        </div>
+                        <form id="reunionForm" 
+                              action="https://docs.google.com/forms/d/e/1FAIpQLSefeYweYD9RHfzzRuQzuE5ClRs6xfvd9FS6YbDBXAkgYtv1ag/formResponse" 
+                              method="POST" 
+                              target="hidden_iframe" 
+                              class="space-y-6">
+                        
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider font-extrabold text-gray-500 dark:text-gray-400 mb-2">Full Name *</label>
+                                <input type="text" name="entry.694006748" required placeholder="John Doe (or school nickname!)" 
+                                       class="form-input-field w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-950 outline-none transition shadow-inner">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider font-extrabold text-gray-500 dark:text-gray-400 mb-2">WhatsApp Number *</label>
+                                <input type="tel" name="entry.1118785046" required placeholder="+91 XXXXX XXXXX" 
+                                       class="form-input-field w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-950 outline-none transition shadow-inner">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider font-extrabold text-gray-500 dark:text-gray-400 mb-2">When are you available? (Select all that apply)</label>
+                                <div class="grid grid-cols-2 gap-4 mt-2">
+                                    <label class="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl cursor-pointer hover:bg-indigo-50/50 dark:hover:bg-indigo-950/20 transition group">
+                                        <input type="checkbox" name="entry.1424756584" value="Sunday" class="form-input-field w-5 h-5 text-indigo-600 border-gray-300 dark:border-slate-700 rounded focus:ring-indigo-500 accent-indigo-600">
+                                        <span class="text-gray-700 dark:text-gray-300 font-medium group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Sunday</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl cursor-pointer hover:bg-indigo-50/50 dark:hover:bg-indigo-950/20 transition group">
+                                        <input type="checkbox" name="entry.1424756584" value="Saturday" class="form-input-field w-5 h-5 text-indigo-600 border-gray-300 dark:border-slate-700 rounded focus:ring-indigo-500 accent-indigo-600">
+                                        <span class="text-gray-700 dark:text-gray-300 font-medium group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Saturday</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider font-extrabold text-gray-500 dark:text-gray-400 mb-2">Where should we gather? *</label>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+                                    <label class="relative flex flex-col p-4 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl cursor-pointer hover:border-indigo-400 dark:hover:border-indigo-500 transition group">
+                                        <div class="flex items-center space-x-3 mb-2">
+                                            <input type="radio" name="entry.288782654" value="Caffericcis" required class="form-input-field w-4 h-4 text-indigo-600 border-gray-300 dark:border-slate-700 focus:ring-indigo-500 accent-indigo-600">
+                                            <span class="font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Caffericcis</span>
+                                        </div>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">A vibrant gathering or evening lounge setup right in the city center.</span>
+                                    </label>
+                                    <label class="relative flex flex-col p-4 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl cursor-pointer hover:border-indigo-400 dark:hover:border-indigo-500 transition group">
+                                        <div class="flex items-center space-x-3 mb-2">
+                                            <input type="radio" name="entry.288782654" value="Hill N Chill" class="form-input-field w-4 h-4 text-indigo-600 border-gray-300 dark:border-slate-700 focus:ring-indigo-500 accent-indigo-600">
+                                            <span class="font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Hill N Chill</span>
+                                        </div>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">A local hangout or weekend resort plan. Closer to home base with minimal travel time.</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                                <div class="rounded-xl overflow-hidden shadow-md h-36 border border-gray-200 dark:border-slate-700 relative bg-gray-100">
+                                    <iframe class="w-full h-full border-0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3766.5582623451623!2d72.97503067500753!3d19.258074246231807!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7bb2979ae1f9f%3A0xeaee41fbe4202a7!2sRicci&#39;s%20caff%C3%A8!5e0!3m2!1sen!2sin!4v1782054629616!5m2!1sen!2sin" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                </div>
+                                <div class="rounded-xl overflow-hidden shadow-md h-36 border border-gray-200 dark:border-slate-700 relative bg-gray-100">
+                                    <iframe class="w-full h-full border-0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3765.18189520522!2d73.08791687500887!3d19.317911744334005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be79700574a6a21%3A0x707e9634e78d7019!2sHill%20N%20Chill%20Rooftop%20Cafe!5e0!3m2!1sen!2sin!4v1782054745081!5m2!1sen!2sin" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider font-extrabold text-gray-500 dark:text-gray-400 mb-2">Are you down to attend? *</label>
+                                <select name="entry.416469257" required class="form-input-field w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 focus:ring-2 focus:ring-indigo-500 bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white outline-none transition cursor-pointer font-medium">
+                                    <option value="" class="text-gray-400">Choose an option</option>
+                                    <option value="Yes">100% Count Me In! 🔥</option>
+                                    <option value="Maybe">Maybe, keep me updated 🤔</option>
+                                    <option value="No">Can't make it, but keep me in the loop 😢</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white font-black py-4 px-4 rounded-xl shadow-xl transition transform hover:-translate-y-0.5 active:translate-y-0 tracking-wide text-lg">
+                                Submit Responses 💥
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-3xl text-white p-8 shadow-xl mb-6">
+                        <h3 class="text-2xl font-black mb-6">📊 Live Statistics</h3>
+                        <div class="space-y-5">
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span>Total Responses</span>
+                                    <span id="liveTotalCount">--</span>
+                                </div>
+                                <div class="bg-white/20 h-3 rounded-full overflow-hidden">
+                                    <div id="liveTotalProgressBar" class="bg-white h-full transition-all duration-1000" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span>Confirmed</span>
+                                    <span id="liveConfirmedPercent">--%</span>
+                                </div>
+                                <div class="bg-white/20 h-3 rounded-full overflow-hidden">
+                                    <div id="liveConfirmedProgressBar" class="bg-white h-full transition-all duration-1000" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span>Caffericcis Votes</span>
+                                    <span id="liveCaffericcisPercent">--%</span>
+                                </div>
+                                <div class="bg-white/20 h-3 rounded-full overflow-hidden">
+                                    <div id="liveCaffericcisProgressBar" class="bg-white h-full transition-all duration-1000" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div>
+                            <div class="flex justify-between mb-2">
+                                <span>Hill N Chill Votes</span>
+                                <span id="liveHillnChillPercent">--%</span>
+                            </div>
+                            <div class="bg-white/20 h-3 rounded-full overflow-hidden">
+                                <div id="liveHillnChillProgressBar" class="bg-white h-full transition-all duration-1000" style="width: 0%"></div>
+                            </div>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-3xl p-6 shadow-sm">
+                        <h4 class="font-black text-lg mb-3 text-yellow-800">⚡ Quick Reminder</h4>
+                        <p class="text-sm text-gray-600">
+                            Final venue and payment details will be shared once voting closes. Respond early to avoid missing updates.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+        <div class="max-w-6xl mx-auto text-center">
+            <h2 class="text-5xl font-black mb-4">🔥 Registration Momentum</h2>
+            <p class="text-indigo-100 mb-10">Batchmates are joining every day.</p>
+            <div class="bg-white/10 backdrop-blur rounded-3xl p-10 inline-block">
+                <div id="registeredCount" class="text-7xl font-black mb-3">0</div>
+                <div class="text-xl">Responses Received</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 px-6 bg-white">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-5xl font-black mb-3">🎓 Roll Call Wall</h2>
+                <p class="text-gray-500">Who's already coming?</p>
+            </div>
+            <div id="attendeeWall" class="flex flex-wrap justify-center gap-3">
+                <span class="bg-indigo-100 text-indigo-700 px-5 py-3 rounded-full font-bold animate-pulse">
+                    Loading Data Stream...
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 px-6 bg-gray-50">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-5xl font-black text-center mb-12">💰 Budget Breakdown</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-3xl shadow-lg p-8">
+                    <div class="text-5xl mb-4">🍽</div>
+                    <h3 class="font-black text-xl mb-3">Food & Drinks</h3>
+                    <div class="text-4xl font-black text-indigo-600 mb-2">1200</div>
+                    <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
+                        <div class="bg-indigo-600 h-full w-[60%]"></div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-3xl shadow-lg p-8">
+                    <div class="text-5xl mb-4">🎵</div>
+                    <h3 class="font-black text-xl mb-3">Venue & Music</h3>
+                    <div class="text-4xl font-black text-indigo-600 mb-2">500</div>
+                    <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
+                        <div class="bg-indigo-600 h-full w-[25%]"></div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-3xl shadow-lg p-8">
+                    <div class="text-5xl mb-4">📸</div>
+                    <h3 class="font-black text-xl mb-3">Photography</h3>
+                    <div class="text-4xl font-black text-indigo-600 mb-2">300</div>
+                    <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
+                        <div class="bg-indigo-600 h-full w-[15%]"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 px-6 bg-white">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-4xl font-black mb-4">📢 Spread The Word</h2>
+            <p class="text-gray-500 mb-8">Help us reach everyone from the batch.</p>
+            <button onclick="copyInviteText()" id="copyBtn" class="bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 rounded-2xl font-bold shadow-xl transition-colors">
+                📋 Copy Reunion Invite
+            </button>
+        </div>
+    </section>
+
+    <section class="py-20 px-6 bg-gray-50">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-5xl font-black text-center mb-12">❓ FAQ</h2>
+            <div class="space-y-4">
+                <details class="bg-white rounded-2xl shadow p-6">
+                    <summary class="font-bold cursor-pointer outline-none select-none">Can I bring a friend?</summary>
+                    <p class="mt-4 text-gray-500">This event is intended primarily for our batchmates.</p>
+                </details>
+                <details class="bg-white rounded-2xl shadow p-6">
+                    <summary class="font-bold cursor-pointer outline-none select-none">How is the venue selected?</summary>
+                    <p class="mt-4 text-gray-500">The location with the highest votes wins.</p>
+                </details>
+                <details class="bg-white rounded-2xl shadow p-6">
+                    <summary class="font-bold cursor-pointer outline-none select-none">When will final details be shared?</summary>
+                    <p class="mt-4 text-gray-500">After voting closes and attendance numbers are finalized.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <div id="successModal" class="fixed inset-0 bg-black/70 hidden z-50 flex items-center justify-center p-6">
+        <div class="bg-white rounded-3xl p-10 text-center max-w-md w-full">
+            <div class="text-7xl mb-4">🎉</div>
+            <h3 class="text-3xl font-black mb-3 text-gray-900">Response Captured!</h3>
+            <p class="text-gray-500 mb-8">Thanks for helping plan the reunion. See you soon!</p>
+            <button onclick="closeModal()" class="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold shadow-md hover:bg-indigo-500 transition-colors">
+                Awesome
+            </button>
+        </div>
+    </div>
+
+    <div id="toast" class="hidden fixed bottom-6 right-6 bg-green-500 text-white px-6 py-3 rounded-xl shadow-2xl z-50 font-bold">
+        Response Saved 🎉
+    </div>
+
+    <footer class="bg-slate-950 text-white py-12 text-center">
+        <div class="text-4xl mb-4">🎓</div>
+        <h3 class="text-2xl font-black mb-3">Batch of 2020 Reunion</h3>
+        <p class="text-slate-400">Built with memories, friendships and nostalgia.</p>
+    </footer>
+
+    <script>
+        let submitted = false;
+
+        // CONFIGURATION: Google Apps Script Web App URL
+        const APPS_SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycby9LPvb_jPwGYt9JaK3aSzFnELJPRR27OIROTxakVTNhBghWzHNVrQE6WmsBNqZDnEy/exec";
+
+        // Initialize AOS animations
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        function toggleTheme(){
+            document.documentElement.classList.toggle('dark');
+        }
+
+        // Live Synchronous Countdown Ticker Module
+        const targetDate = new Date("June 28, 2026 23:59:59").getTime();
+
+        setInterval(() => {
+            const now = new Date().getTime();
+            const gap = targetDate - now;
+
+            if(gap <= 0) return;
+
+            document.getElementById('days').innerText = Math.floor(gap / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+            document.getElementById('hours').innerText = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+            document.getElementById('minutes').innerText = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+            document.getElementById('seconds').innerText = Math.floor((gap % (1000 * 60)) / 1000).toString().padStart(2, '0');
+        }, 1000);
+
+        // Typed Header Typography Engine Logic
+        const titleText = "THE GRAND REUNION";
+        let i = 0;
+        function typeWriter(){
+            if(i < titleText.length){
+                document.getElementById("typingText").innerHTML += titleText.charAt(i);
+                i++;
+                setTimeout(typeWriter, 100);
+            } else {
+                document.getElementById("typingText").innerHTML += '<span class="typing-cursor">|</span>';
+            }
+        }
+        window.addEventListener('DOMContentLoaded', typeWriter);
+
+        // Form Completion Progress Indicator Track Execution
+        const formFields = document.querySelectorAll('.form-input-field');
+        const progressTrack = document.getElementById('formProgress');
+        
+        function updateFormProgress() {
+            let completed = 0;
+            const requiredFields = Array.from(formFields).filter(f => f.hasAttribute('required'));
+            
+            requiredFields.forEach(field => {
+                if (field.type === 'radio') {
+                    const name = field.getAttribute('name');
+                    if (document.querySelector(`input[name="${name}"]:checked`)) completed++;
+                } else if (field.value.trim() !== "") {
+                    completed++;
+                }
+            });
+            
+            const totalRequired = [...new Set(Array.from(requiredFields).map(f => f.getAttribute('name')))].length;
+            const percentage = (completed / totalRequired) * 100;
+            progressTrack.style.width = `${percentage}%`;
+        }
+
+        formFields.forEach(element => {
+            element.addEventListener('input', updateFormProgress);
+            element.addEventListener('change', updateFormProgress);
+        });
+
+        // intercept standard HTML submit to flag fallback routing verification
+        document.getElementById('reunionForm').addEventListener('submit', function() {
+            submitted = true;
+        });
+
+        function handleFormSubmitSuccess() {
+            confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+            
+            document.getElementById('successModal').classList.remove('hidden');
+            const toast = document.getElementById('toast');
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 4000);
+            
+            document.getElementById('reunionForm').reset();
+            progressTrack.style.width = '0%';
+            submitted = false;
+            
+            fetchLiveReunionMetrics();
+        }
+
+        function closeModal() {
+            document.getElementById('successModal').classList.add('hidden');
+        }
+
+        function copyInviteText() {
+            const inviteText = `🎓 Batch of 2020 Grand Reunion 2026! 🚀\n\nHey batchmate! The plans are underway. Lock in your preferences, vote for the location, and RSVP here:\n${window.location.href}\n\nLet's make this historic! 🔥`;
+            navigator.clipboard.writeText(inviteText).then(() => {
+                const copyBtn = document.getElementById('copyBtn');
+                copyBtn.innerText = "✅ Invite Copied!";
+                setTimeout(() => copyBtn.innerText = "📋 Copy Reunion Invite", 2000);
+            });
+        }
+
+        // DYNAMIC API FETCH & UI INJECTION MODULE
+        async function fetchLiveReunionMetrics() {
+            if (!APPS_SCRIPT_WEB_APP_URL || APPS_SCRIPT_WEB_APP_URL.includes("YOUR_GOOGLE_APPS_SCRIPT")) {
+                console.warn("Please configure your APPS_SCRIPT_WEB_APP_URL pipeline endpoint to fetch real-time sheet datasets.");
+                loadFallbackMockStatistics();
+                return;
+            }
+
+            try {
+                // Appending a unique timestamp prevents the browser from loading cached datasets
+                const cacheBusterUrl = `${APPS_SCRIPT_WEB_APP_URL}?_=${new Date().getTime()}`;
+                const response = await fetch(cacheBusterUrl);
+                const data = await response.json();
+                renderDynamicData(data);
+            } catch (error) {
+                console.error("Data pipeline processing failure:", error);
+                loadFallbackMockStatistics();
+            }
+        }
+
+        function renderDynamicData(attendees) {
+            const totalResponses = attendees.length;
+            
+            let confirmedCount = 0;
+            let CaffericcisVotes = 0;
+            let HillnChillVotes = 0;
+            const namesArray = [];
+
+            attendees.forEach(member => {
+                namesArray.push(member.name);
+                if (member.attending === "Yes") confirmedCount++;
+                
+                // Trim trailing/leading whitespace and normalize venue evaluation to match submission string exactly
+                const venueClean = member.venue ? member.venue.trim() : "";
+                if (venueClean === "Caffericcis") CaffericcisVotes++;
+                if (venueClean === "Hill N Chill" || venueClean === "HillnChill") HillnChillVotes++;
+            });
+
+            const confirmedPercent = totalResponses > 0 ? Math.round((confirmedCount / totalResponses) * 100) : 0;
+            const CaffericcisPercent = totalResponses > 0 ? Math.round((CaffericcisVotes / totalResponses) * 100) : 0;
+            const HillnChillPercent = totalResponses > 0 ? Math.round((HillnChillVotes / totalResponses) * 100) : 0;
+            const leadingLocation = CaffericcisVotes >= HillnChillVotes ? "Caffericcis" : "Hill N Chill";
+
+            // Bind values to DOM structures
+            document.getElementById('registeredCount').innerText = totalResponses;
+            document.getElementById('liveTotalCount').innerText = totalResponses;
+            document.getElementById('liveTotalProgressBar').style.width = `${Math.min(totalResponses, 100)}%`;
+
+            document.getElementById('statConfirmedPercent').innerText = `${confirmedPercent}%`;
+            document.getElementById('liveConfirmedPercent').innerText = `${confirmedPercent}%`;
+            document.getElementById('liveConfirmedProgressBar').style.width = `${confirmedPercent}%`;
+
+            document.getElementById('statLeadingVote').innerText = leadingLocation;
+            document.getElementById('liveCaffericcisPercent').innerText = `${CaffericcisPercent}%`;
+            document.getElementById('liveCaffericcisProgressBar').style.width = `${CaffericcisPercent}%`;
+            // ADD THESE TWO LINES DIRECTLY BELOW IT:
+            document.getElementById('liveHillnChillPercent').innerText = `${HillnChillPercent}%`;
+            document.getElementById('liveHillnChillProgressBar').style.width = `${HillnChillPercent}%`;
+
+            document.getElementById('voteCountCaffericcis').innerText = `${CaffericcisVotes} Votes`;
+            document.getElementById('voteProgressCaffericcis').style.width = `${CaffericcisPercent}%`;
+            document.getElementById('voteCountHillnChill').innerText = `${HillnChillVotes} Votes`;
+            document.getElementById('voteProgressHillnChill').style.width = `${HillnChillPercent}%`;
+
+            // Build Wall Component
+            const wall = document.getElementById('attendeeWall');
+            wall.innerHTML = "";
+            
+            if(namesArray.length === 0) {
+                wall.innerHTML = `<span class="text-gray-400 italic">No submissions logged yet. Be the first!</span>`;
+                return;
+            }
+
+            namesArray.forEach(name => {
+                const pill = document.createElement('span');
+                pill.className = "bg-indigo-50 dark:bg-slate-800 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-slate-700 px-5 py-2.5 rounded-full font-bold shadow-sm text-sm hover:scale-105 transition-transform duration-300";
+                pill.innerText = `🎓 ${name}`;
+                wall.appendChild(pill);
+            });
+        }
+
+        function loadFallbackMockStatistics() {
+            const fallbackMockData = [
+                { name: "Aditya Rao", attending: "Yes", venue: "Caffericcis" },
+                { name: "Sneha Patil", attending: "Yes", venue: "Caffericcis" },
+                { name: "Rahul Sharma", attending: "Yes", venue: "Hill N Chill" },
+                { name: "Priya Nair", attending: "Maybe", venue: "Caffericcis" },
+                { name: "Vikram Malhotra", attending: "Yes", venue: "Hill N Chill" }
+            ];
+            renderDynamicData(fallbackMockData);
+        }
+
+        window.addEventListener('load', fetchLiveReunionMetrics);
+    </script>
+</body>
+</html>
